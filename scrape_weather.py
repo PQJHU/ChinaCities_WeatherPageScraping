@@ -1,3 +1,14 @@
+"""
+This is a preliminary tutorial for scraping webpages
+
+With a lot notes, one can easily get touch webscraping with Python
+
+Python Version: 3.6
+
+@Author: Junjie Hu, jeremy.junjie.hu@gmail.com
+
+"""
+
 # Import all the packages you need, always remember that you can find 99% packages you need in python
 import requests  # take the website source code back to you
 import urllib  # some useful functions to deal with website urls
