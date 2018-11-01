@@ -1,7 +1,7 @@
 """
-This is a preliminary tutorial for scraping webpages
+This is a preliminary tutorial for scraping web pages
 
-With a lot notes, one can easily get touch webscraping with Python
+With a lot of notes, one can easily get touch web scraping with Python
 
 Python Version: 3.6
 
@@ -11,8 +11,8 @@ Python Version: 3.6
 
 # Import all the packages you need, always remember that you can find 99% packages you need in python
 import requests  # take the website source code back to you
-import urllib  # some useful functions to deal with website urls
-from bs4 import BeautifulSoup as soup  # a packages to parse website source code
+import urllib  # some useful functions to deal with website URLs
+from bs4 import BeautifulSoup as soup  # a package to parse website source code
 import numpy as np  # all the numerical calculation related methods
 import re  # regular expression package
 import itertools  # a package to do iteration works
@@ -22,12 +22,6 @@ import pandas as pd  # process structured data
 save_path = 'output/'  # the path you save your files
 
 base_link = 'http://www.tianqihoubao.com/lishi/'  # This link can represent the domain of a series of websites
-
-provinces = dict()
-
-
-# This dictionary includes 'province_link' which means links to find the cities for each province
-# and the 'cities' which means city names and links
 
 
 def city_collection():
@@ -95,15 +89,17 @@ months = np.arange(start=1, stop=13)
 it = list(itertools.product(years, months))
 date = [str(ele[0]) + format(ele[1], '02d') for ele in it]  # '02d' means 2 digits
 
+#  ==== Since I have already download the links to all the cities, you just need to execute from here:=====
+#  ==== Otherwise, use function below to retrieve provinces information ======
+provinces = dict()  # initialize a dictionary to hold provinces information
+# This dictionary includes 'province_link' which means links to find the cities for each province
+# and the 'cities' which means city names and links
 # provinces_info = city_collection()  # Use this function to retrieve links to all the cities
 
-
-#  ==== Since I have already download the links to all the cities, you just need to execute from here:=========
-
 # This is called context management, with open can close the document automatically when the
-with open('output_cities_link.pkl', 'rb') as cities_file:
-    provinces_info = pickle.load(cities_file)  # read, change 'wb' -> 'rb'
-    print(cities_file)
+with open('DEDA_Class_2017_WebScrapingIntro/output_cities_link.pkl', 'rb') as cities_file:  # write, change 'rb' -> 'wb'
+    provinces_info = pickle.load(cities_file)
+    print(provinces_info)
     # pickle.dump(provinces_info, cities_file)  # write
 
 weather_record = dict()
@@ -111,15 +107,21 @@ weather_record = dict()
 # first layer keyword is province name
 # In each province you can find the cities
 # In each city, you can find the date, in the date, you can find weather record
-# Try to convert the "joson"-like format to pandas DataFrame
 for key in provinces_info.keys():
-    # print(key)
+    # Iterate over different provinces
+    print(key)
     for city_name, city_link in provinces_info[key]['cities'].items():
+        # Iterate cities within each provinces
         print(city_name)
         for month_date in date:
+            # Iterate over different months
             print(city_name)
             print(month_date)
-            # print(provinces_info[key]['cities'][city_name])
+            print(provinces_info[key]['cities'][city_name])
+            print("On Scraping...")
             month_weather = weather_collection(
                 urllib.parse.urljoin(base_link, city_link) + '/month/' + month_date + '.html')
             weather_record[key] = {city_name: {month_date: month_weather}}
+print('Finished Scraping.')
+
+# Quiz: Try to convert the "json"-like format to pandas DataFrame
